@@ -27,26 +27,48 @@ public class QuizDbHelper extends SQLiteOpenHelper{
     public void onCreate(SQLiteDatabase db) {
         this.db = db;
 
+        final String SQL_CREATE_CATEGORIES_TABLE = "CREATE TABLE "+
+                CategoriesTable.TABLE_NAME + "( " +
+                CategoriesTable._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                CategoriesTable.COLUMN_NAME + " TEXT " + ")";
+
         final String SQL_CREATE_QUESTIONS_TABLE =
 
                 "CREATE TABLE "+ QuestionsTable.TABLE_NAME +
 
-                " ( "+ QuestionsTable._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "+
+                " ( "+
+                        QuestionsTable._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "+
                 QuestionsTable.COLUMN_QUESTION + " TEXT, " +
                 QuestionsTable.COLUMN_OPTION1 + " TEXT, "+
                 QuestionsTable.COLUMN_OPTION2 + " TEXT, "+
                 QuestionsTable.COLUMN_OPTION3 + " TEXT, "+
                 QuestionsTable.COLUMN_ANSWER_NR + " INTEGER, "+
-                        QuestionsTable.COLUMN_DIFFICULTY + " TEXT" +")";
+                        QuestionsTable.COLUMN_DIFFICULTY + " TEXT, " +
+                        QuestionsTable.COLUMN_CATEGORY_ID + " INTEGER, " +
+                        "FOREIGN KEY(" + QuestionsTable.COLUMN_CATEGORY_ID + ") REFERENCES " +
+                        CategoriesTable.TABLE_NAME + "(" + CategoriesTable._ID + ")" + "ON DELETE CASCADE"+
+                        ")";
 
+        db.execSQL(SQL_CREATE_CATEGORIES_TABLE);
         db.execSQL(SQL_CREATE_QUESTIONS_TABLE);
+        fillCategoriesTable();
         fillQuestionsTable();
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL("DROP TABLE IF EXISTS " + CategoriesTable.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + QuestionsTable.TABLE_NAME);
         onCreate(db);
+
+    }
+
+    @Override
+    public void onConfigure(SQLiteDatabase db) {
+        super.onConfigure(db);
+        db.setForeignKeyConstraintsEnabled(true);
+    }
+    private void fillCategoriesTable(){
 
     }
 
