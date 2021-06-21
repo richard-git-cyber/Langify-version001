@@ -24,12 +24,20 @@
         android:layout_below="@+id/text_view_score"
         android:freezesText="true"/>
     <TextView
+        android:id="@+id/text_view_category"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Category: "
+        android:textColor="@color/black"
+        android:layout_below="@+id/text_view_question_count"
+        android:freezesText="true"/>
+    <TextView
         android:id="@+id/text_view_difficulty"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Difficulty: "
         android:textColor="@color/black"
-        android:layout_below="@+id/text_view_question_count"
+        android:layout_below="@+id/text_view_category"
         android:freezesText="true"/>
     <TextView
         android:id="@+id/text_view_countdown"

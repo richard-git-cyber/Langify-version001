@@ -36,6 +36,7 @@ public class QuizActivity extends AppCompatActivity {
     private TextView textViewQuestion;
     private TextView textViewScore;
     private TextView textViewQuestionCount;
+    private TextView textViewCategory;
     private TextView textViewDifficulty;
     private TextView textViewCountDown;
     private RadioGroup rbGroup;
@@ -68,6 +69,7 @@ public class QuizActivity extends AppCompatActivity {
         textViewQuestion = findViewById(R.id.text_view_question);
         textViewScore = findViewById(R.id.text_view_score);
         textViewQuestionCount = findViewById(R.id.text_view_question_count);
+        textViewCategory = findViewById(R.id.text_view_category);
         textViewDifficulty = findViewById(R.id.text_view_difficulty);
         textViewCountDown = findViewById(R.id.text_view_countdown);
         rbGroup = findViewById(R.id.radio_group);
@@ -80,14 +82,18 @@ public class QuizActivity extends AppCompatActivity {
         getTextColorDefaultCd = textViewCountDown.getTextColors();
 
         Intent intent = getIntent();
+        int categoryID = intent.getIntExtra(MainActivity.EXTRA_CATEGORY_ID,0);
+        String categoryName = intent.getStringExtra(MainActivity.EXTRA_CATEGORY_NAME);
         String level = intent.getStringExtra(MainActivity.EXTRA_DIFFICULTY);
+
+        textViewCategory.setText("Category: "+ categoryName);
         textViewDifficulty.setText("Difficulty : "+level);
 
         if (savedInstanceState == null) {
 
 
-            QuizDbHelper dbHelper = new QuizDbHelper(this);
-            questionList = dbHelper.getQuestion(level);
+            QuizDbHelper dbHelper = QuizDbHelper.getInstance(this);
+            questionList = dbHelper.getQuestion(categoryID,level);
             questionCountTotal = questionList.size();
             Collections.shuffle(questionList);
 
@@ -125,6 +131,7 @@ public class QuizActivity extends AppCompatActivity {
                 }
             }
         });
+
 
     }
 
